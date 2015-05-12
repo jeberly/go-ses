@@ -51,6 +51,19 @@ func (c *Config) SendEmail(from, to, subject, body string) (string, error) {
 	return sesPost(data, c.AccessKeyID, c.SecretAccessKey)
 }
 
+func (c *Config) SendEmailWithReplyTo(from, to, replyTo, subject, body string) (string, error) {
+	data := make(url.Values)
+	data.Add("Action", "SendEmail")
+	data.Add("Source", from)
+	data.Add("Destination.ToAddresses.member.1", to)
+	data.Add("Message.Subject.Data", subject)
+	data.Add("Message.Body.Text.Data", body)
+	data.Add("AWSAccessKeyId", c.AccessKeyID)
+	data.Add("ReplyToAddresses.member.1", replyTo)
+
+	return sesPost(data, c.AccessKeyID, c.SecretAccessKey)
+}
+
 func (c *Config) SendEmailHTML(from, to, subject, bodyText, bodyHTML string) (string, error) {
 	data := make(url.Values)
 	data.Add("Action", "SendEmail")
